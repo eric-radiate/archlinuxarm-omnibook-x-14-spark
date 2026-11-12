@@ -1,0 +1,216 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 34,
+  "spacing": 4,
+  "reload_style_on_change": true,
+  "modules-left": [
+    "custom/ws1",
+    "custom/ws2",
+    "custom/ws3",
+    "custom/ws4",
+    "custom/ws5",
+    "hyprland/window"
+  ],
+  "modules-center": [
+    "custom/gpu",
+    "cpu",
+    "memory",
+    "temperature"
+  ],
+  "modules-right": [
+    "custom/notification",
+    "tray",
+    "bluetooth",
+    "network",
+    "custom/volume",
+    "custom/microphone",
+    "custom/display",
+    "custom/rotate",
+    "custom/presence",
+    "custom/hold",
+    "backlight",
+    "custom/power",
+    "battery",
+    "clock"
+  ],
+  "custom/ws1": {
+    "exec": "@HOME@/.config/waybar/ws.sh 1",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "@HOME@/.config/waybar/focus.sh 1",
+    "tooltip": false
+  },
+  "custom/ws2": {
+    "exec": "@HOME@/.config/waybar/ws.sh 2",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "@HOME@/.config/waybar/focus.sh 2",
+    "tooltip": false
+  },
+  "custom/ws3": {
+    "exec": "@HOME@/.config/waybar/ws.sh 3",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "@HOME@/.config/waybar/focus.sh 3",
+    "tooltip": false
+  },
+  "custom/ws4": {
+    "exec": "@HOME@/.config/waybar/ws.sh 4",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "@HOME@/.config/waybar/focus.sh 4",
+    "tooltip": false
+  },
+  "custom/ws5": {
+    "exec": "@HOME@/.config/waybar/ws.sh 5",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "@HOME@/.config/waybar/focus.sh 5",
+    "tooltip": false
+  },
+  "hyprland/window": {
+    "max-length": 20,
+    "separate-outputs": true
+  },
+  "custom/gpu": {
+    "exec": "@HOME@/.config/waybar/gpu-status.py",
+    "interval": 5,
+    "return-type": "json"
+  },
+  "cpu": {
+    "format": "CPU {usage}%",
+    "interval": 2
+  },
+  "memory": {
+    "format": "RAM {percentage}%",
+    "interval": 2,
+    "tooltip-format": "{used:0.1f} / {total:0.1f} GiB"
+  },
+  "temperature": {
+    "thermal-zone": 0,
+    "format": "SOC {temperatureC}\u00b0C",
+    "critical-threshold": 90
+  },
+  "network": {
+    "interface": "wlo1",
+    "format-wifi": "{essid} {signalStrength}%",
+    "format-ethernet": "{ipaddr}",
+    "format-disconnected": "offline",
+    "tooltip-format-wifi": "{essid}\n{ifname}  {ipaddr}\nSignal {signalStrength}%  {frequency} GHz\nClick for Wi-Fi settings",
+    "on-click": "kitty --class network-settings --title \"Wi-Fi Settings\" nmtui",
+    "max-length": 16
+  },
+  "custom/volume": {
+    "exec": "@HOME@/.config/waybar/volume-status.py",
+    "return-type": "json",
+    "interval": 1,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-right": "@HOME@/.config/waybar/open-control.sh audio",
+    "on-scroll-up": "wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+  },
+  "battery": {
+    "format": "bat {capacity}%",
+    "format-charging": "bat {capacity}%+",
+    "interval": 10,
+    "bat": "BAT0",
+    "states": {
+      "warning": 20,
+      "critical": 10
+    },
+    "format-plugged": "bat {capacity}% AC",
+    "format-full": "bat {capacity}%",
+    "tooltip-format": "{capacity}% \u00b7 {power:.1f} W\nEstimated remaining: {time}"
+  },
+  "clock": {
+    "format": "{:%a %H:%M}",
+    "tooltip-format": "{:%A, %B %d, %Y}\n\n{calendar}"
+  },
+  "bluetooth": {
+    "format": "BT {status}",
+    "format-on": "BT",
+    "format-off": "BT off",
+    "format-disabled": "BT off",
+    "format-no-controller": "BT n/a",
+    "format-connected": "BT {num_connections}",
+    "tooltip-format": "Bluetooth: {status}\nClick to open pairing and devices",
+    "tooltip-format-connected": "{num_connections} connected\n{device_enumerate}\nClick to manage devices",
+    "tooltip-format-enumerate-connected": "{device_alias}",
+    "on-click": "@HOME@/.config/waybar/open-control.sh bluetooth"
+  },
+  "custom/microphone": {
+    "exec": "@HOME@/.config/waybar/microphone-status.py",
+    "return-type": "json",
+    "interval": 2,
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-click-right": "@HOME@/.config/waybar/open-control.sh audio-input",
+    "on-scroll-up": "wpctl set-volume -l 1 @DEFAULT_AUDIO_SOURCE@ 5%+",
+    "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SOURCE@ 5%-"
+  },
+  "backlight": {
+    "device": "nvidia_0",
+    "format": "light {percent}%",
+    "scroll-step": 5.0,
+    "min-brightness": 5.0,
+    "tooltip-format": "Display brightness {percent}%\nScroll to adjust"
+  },
+  "tray": {
+    "icon-size": 16,
+    "spacing": 6
+  },
+  "custom/notification": {
+    "format": "{icon} {0}",
+    "format-icons": {
+      "notification": "N",
+      "none": "N",
+      "dnd-notification": "DND",
+      "dnd-none": "DND",
+      "inhibited-notification": "N",
+      "inhibited-none": "N",
+      "dnd-inhibited-notification": "DND",
+      "dnd-inhibited-none": "DND"
+    },
+    "return-type": "json",
+    "exec-if": "command -v swaync-client",
+    "exec": "swaync-client -swb",
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "escape": true,
+    "tooltip": true
+  },
+  "custom/display": {
+    "exec": "@HOME@/.config/waybar/display-settings.py --status",
+    "return-type": "json",
+    "interval": 5,
+    "on-click": "@HOME@/.config/waybar/display-settings.py"
+  },
+  "custom/rotate": {
+    "exec": "@HOME@/.config/waybar/rotate-status.py",
+    "return-type": "json",
+    "interval": 2,
+    "signal": 8,
+    "on-click": "@HOME@/.config/hypr/rotate-panel.sh toggle"
+  },
+  "custom/presence": {
+    "exec": "@HOME@/.config/waybar/presence-status.py",
+    "return-type": "json",
+    "interval": 2,
+    "signal": 9,
+    "on-click": "@HOME@/.config/waybar/presence-toggle.sh"
+  },
+  "custom/hold": {
+    "exec": "@HOME@/.config/waybar/hold-status.py",
+    "return-type": "json",
+    "interval": 2,
+    "signal": 11,
+    "on-click": "@HOME@/.config/waybar/hold-toggle.sh"
+  },
+  "custom/power": {
+    "exec": "@HOME@/.config/waybar/power-status.py",
+    "return-type": "json",
+    "interval": 5,
+    "signal": 10,
+    "on-click": "@HOME@/.config/waybar/power-toggle.sh"
+  }
+}

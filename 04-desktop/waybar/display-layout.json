@@ -1,0 +1,16 @@
+{
+  "left": [
+    "custom/ws1",
+    "custom/ws2",
+    "custom/ws3",
+    "custom/ws4",
+    "custom/ws5",
+    "hyprland/window"
+  ],
+  "center": [
+    "custom/gpu",
+    "cpu",
+    "memory",
+    "temperature"
+  ]
+}

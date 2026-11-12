@@ -1,0 +1,16 @@
+{
+  "product_name": "HP OmniBook X Laptop 14-ks000",
+  "board_vendor": "HP",
+  "board_name": "8F22",
+  "product_sku": "E4KN9AV",
+  "bios_vendor": "AMI",
+  "bios_version": "F.05",
+  "bios_date": "09/29/2026",
+  "arch": "aarch64",
+  "os_id": "archarm",
+  "kernel_release": "7.0.0-1022-nvidia",
+  "gpu": "NVIDIA RTX Spark N1X",
+  "cuda_cores": 6144,
+  "panel": "2880x1800@120",
+  "soundwire_card": "HP-HPOmniBookXLaptop14_ks000-8F22"
+}

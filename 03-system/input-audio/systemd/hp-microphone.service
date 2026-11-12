@@ -1,0 +1,17 @@
+[Unit]
+Description=HP OmniBook X internal microphone (UL1 DP12 PDM2)
+After=pipewire.service wireplumber.service hp-audio-route.service
+Wants=pipewire.service
+PartOf=pipewire.service
+StartLimitIntervalSec=60
+StartLimitBurst=2
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/hp-microphone.py
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+
+[Install]
+WantedBy=default.target

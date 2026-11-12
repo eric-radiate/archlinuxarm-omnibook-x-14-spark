@@ -1,0 +1,12 @@
+[Unit]
+Description=HP OmniBook X speaker route
+After=pipewire.service wireplumber.service
+PartOf=graphical-session.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/hp-audio-route.py
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

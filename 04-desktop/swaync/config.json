@@ -1,0 +1,28 @@
+{
+  "positionX": "right",
+  "positionY": "top",
+  "control-center-positionX": "right",
+  "control-center-positionY": "top",
+  "control-center-margin-top": 40,
+  "control-center-margin-right": 8,
+  "control-center-width": 380,
+  "notification-window-width": 360,
+  "timeout": 8,
+  "timeout-low": 5,
+  "timeout-critical": 0,
+  "widgets": [
+    "title",
+    "dnd",
+    "notifications"
+  ],
+  "widget-config": {
+    "title": {
+      "text": "Notifications",
+      "clear-all-button": true,
+      "button-text": "Clear all"
+    },
+    "dnd": {
+      "text": "Do Not Disturb"
+    }
+  }
+}

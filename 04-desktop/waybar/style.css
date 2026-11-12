@@ -1,0 +1,97 @@
+* {
+  font-family: "sans-serif";
+  font-size: 13px;
+  min-height: 0;
+}
+
+window#waybar {
+  background: rgba(18, 18, 22, 0.92);
+  color: #e8e8ee;
+}
+
+#custom-ws1,
+#custom-ws2,
+#custom-ws3,
+#custom-ws4,
+#custom-ws5 {
+  padding: 0 8px;
+  color: #9aa0aa;
+  background: transparent;
+  border-radius: 6px;
+}
+
+#custom-ws1.active,
+#custom-ws2.active,
+#custom-ws3.active,
+#custom-ws4.active,
+#custom-ws5.active {
+  color: #04140c;
+  background: #3ddc97;
+}
+
+#window {
+  color: #c8cdd6;
+}
+
+#custom-gpu,
+#cpu,
+#memory,
+#temperature,
+#network,
+#custom-volume,
+#battery,
+#clock {
+  padding: 0 8px;
+}
+
+#custom-gpu { color: #7ee0ff; }
+#temperature.critical { color: #ff6b6b; }
+#clock { color: #ffffff; }
+
+/* Laptop controls: compact enough for the panel at scale 2. */
+#custom-gpu, #cpu, #memory, #temperature, #network, #custom-volume,
+#battery, #clock, #bluetooth, #custom-microphone, #backlight, #tray {
+  padding: 0 6px;
+}
+#bluetooth { color: #8ab4f8; }
+#bluetooth.off, #bluetooth.disabled, #bluetooth.no-controller { color: #9aa0aa; }
+#bluetooth.connected { color: #3ddc97; }
+#custom-volume { color: #e8e8ee; }
+#custom-volume.muted, #custom-volume.unavailable { color: #ffb86c; }
+#custom-microphone { color: #3ddc97; }
+#custom-microphone.muted, #custom-microphone.unavailable { color: #ffb86c; }
+#backlight { color: #f1d789; }
+#battery.warning { color: #ffb86c; }
+#battery.critical { color: #ff6b6b; }
+#bluetooth:hover, #network:hover, #custom-volume:hover,
+#custom-microphone:hover, #backlight:hover { background: rgba(255,255,255,0.08); }
+tooltip { background: #181a22; color: #e8e8ee; border-radius: 6px; }
+
+#custom-notification { padding: 0 6px; color: #8ab4f8; }
+#custom-notification.dnd-notification, #custom-notification.dnd-none { color: #ffb86c; }
+#custom-notification:hover { background: rgba(255,255,255,0.08); }
+
+#custom-display { padding: 0 6px; color: #b4a1ed; }
+#custom-display:hover { background: rgba(255,255,255,0.08); }
+
+#custom-rotate {
+  padding: 0 6px;
+  color: #b4a1ed;
+  font-family: "Adwaita Mono", sans-serif;
+  font-size: 16px;
+}
+#custom-rotate.portrait { color: #3ddc97; }
+#custom-rotate:hover { background: rgba(255,255,255,0.08); }
+
+#custom-presence { padding: 0 6px; color: #3ddc97; }
+#custom-presence.off { color: #9aa0aa; }
+#custom-presence:hover { background: rgba(255,255,255,0.08); }
+
+#custom-hold { padding: 0 6px; color: #9aa0aa; }
+#custom-hold.on { color: #ffb86c; }
+#custom-hold:hover { background: rgba(255,255,255,0.08); }
+
+#custom-power { padding: 0 6px; color: #e8e8ee; }
+#custom-power.performance { color: #ffb86c; }
+#custom-power.power-saver { color: #3ddc97; }
+#custom-power:hover { background: rgba(255,255,255,0.08); }

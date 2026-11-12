@@ -1,0 +1,10 @@
+# Firmware tables and images. 01-platform/acpi/tests/fixtures/rbuf.asl is synthetic and is tracked.
+*.aml
+*.dsl
+*.cpio
+*.img
+*.iso
+acpi-dump/
+__pycache__/
+*.pyc
+.DS_Store

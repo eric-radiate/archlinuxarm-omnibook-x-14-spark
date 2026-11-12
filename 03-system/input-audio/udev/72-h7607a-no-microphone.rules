@@ -1,0 +1,3 @@
+# Capture nodes must stay accessible. PipeWire 1.6 ignores the whole card,
+# speakers included, when any PCM node is mode 0600. Microphone inputs are
+# handled by the HP route, not by locking the device node.

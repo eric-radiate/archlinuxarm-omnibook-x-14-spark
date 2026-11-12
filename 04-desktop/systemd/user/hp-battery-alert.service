@@ -1,0 +1,7 @@
+[Unit]
+Description=Notify when HP battery is low
+After=swaync.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 %h/.config/waybar/battery-alert.py
