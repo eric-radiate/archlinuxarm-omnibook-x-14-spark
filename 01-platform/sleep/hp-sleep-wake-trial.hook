@@ -1,0 +1,13 @@
+#!/usr/bin/ash
+# SPDX-License-Identifier: MIT
+run_latehook() {
+    [ "$(getarg hp_spark_wake_trial)" = 1 ] || return 0
+    trial_root=/sysroot
+    trial_version=7.0.0-1022-nvidia
+    if ! mount -o bind \
+        "$trial_root/usr/local/lib/hp-sleep-wake-kernel/root/lib/modules/$trial_version" \
+        "$trial_root/usr/lib/modules/$trial_version"; then
+        err 'HP sleep trial modules could not be mounted. Reboot into the original entry.'
+        launch_interactive_shell --exec
+    fi
+}

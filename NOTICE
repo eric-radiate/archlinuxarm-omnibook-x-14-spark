@@ -1,0 +1,66 @@
+Licensing and upstream attribution
+=================================
+
+Original HP helper scripts, policy, documentation and fixtures are MIT unless
+a file or the scope below says otherwise. See LICENSE.
+
+Josephine Pfeiffer
+-----------------
+This HP enablement layer builds on archlinuxarm-proart-p16 at
+3484cc008a9ee00b34c086c729e28e935cbc3430:
+https://github.com/pfeifferj/archlinuxarm-proart-p16/tree/3484cc008a9ee00b34c086c729e28e935cbc3430
+
+Retain her complete copyright and MIT permission notice in
+LICENSES/Josephine-Pfeiffer-MIT.txt. In particular:
+- 01-platform/sleep/build.sh adapts her pinned native kernel build recipe.
+- 01-platform/sleep/verify-modules.py and module_exports.py adapt her module
+  ABI/ELF checking helpers.
+- The layout and HP policy replacements build on the upstream hardware layer.
+This credit and license apply to copied/adapted material; they do not assert
+authorship of the independently written HP-specific fixes by Josephine.
+
+Linux / NVIDIA / MediaTek
+------------------------
+01-platform/sleep/companion/ is GPL-2.0-only, including its sequence test.
+01-platform/sleep/*.patch modify GPL-2.0-only Linux kernel source and retain
+that license, regardless of this repository's top-level MIT helper license.
+The extracted vendor original.config accompanies those kernel sources.
+The full GPL-2.0 text is LICENSES/GPL-2.0-only.txt.
+
+1096-eint-wake.patch is unchanged from NVIDIA author Kaushal Rajeev Butala,
+commit 0f0aeba492533b9dba991f131289d4a17c1f3c5d. Its authorship and
+Signed-off-by are preserved; they are not a new sign-off by this project.
+allocator.patch is Josephine's kernel allocation fix.
+hp-firmware-idle.patch adapts the existing kernel LPI implementation and
+Ryan Hughes' N1x DRIPS selection mechanism.
+The companion implements the LPS0 protocol described in NVIDIA PR656 and
+the late/early EC-settling approach in Omarchy PR1958; the PCI-PM L1.2 mask
+follows Ryan Hughes' N1x work. See docs/sleep.md and pins/provenance.json.
+Existing Linux, NVIDIA and MediaTek copyright/author notices in upstream
+source are not replaced by this repository's license.
+
+Omarchy
+-------
+Omarchy hardware integration and patch recipes were reviewed for porting.
+The project's MIT notice is retained in LICENSES/Omarchy-MIT.txt for any
+adapted integration material. This notice does not relicense Linux patches
+carried by Omarchy; those retain their kernel-source licenses.
+
+Distribution boundary
+---------------------
+No firmware dumps, compiled ACPI overrides, proprietary NVIDIA userspace,
+speaker calibration files, kernel/module binaries, or signing keys are
+distributed by this source tree. Build/install helpers act on inputs acquired
+locally under their publishers' terms; running a helper does not grant rights
+to redistribute its output.
+
+The GPL source and build instructions here are not a blanket corresponding-
+source offer for third-party binaries. If distributing a modified kernel or
+module, provide the complete corresponding source and build/install scripts
+for that binary under the applicable GPL terms, and review every retained
+component's license. Do not assume a link to upstream alone satisfies this.
+Do not publish locally built payloads as releases without that review.
+
+HP, OmniBook, ASUS, ProArt, NVIDIA and Omarchy names identify compatibility
+and upstream projects. There is no vendor affiliation, endorsement, or
+assertion of rights over their trademarks or firmware.

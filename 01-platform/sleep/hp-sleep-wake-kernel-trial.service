@@ -1,0 +1,13 @@
+[Unit]
+Description=HP sleep trial firmware notifications and NVMe link sleep
+ConditionKernelCommandLine=hp_spark_wake_trial=1
+After=local-fs.target systemd-modules-load.service
+Before=multi-user.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/insmod /usr/local/lib/hp-sleep-wake-kernel/hp_n1x_sleep.ko
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,46 @@
+HP OmniBook X 14-ks000 / 8F22 / F.05 experimental sleep source
+Recorded 2026-11-12; see docs/sleep.md and pins/provenance.json.
+
+Baseline: Josephine Pfeiffer, pfeifferj/archlinuxarm-proart-p16
+3484cc008a9ee00b34c086c729e28e935cbc3430.
+build.sh, verify-modules.py and module_exports.py adapt her MIT helpers.
+The complete copyright/permission notice is LICENSES/Josephine-Pfeiffer-MIT.txt.
+
+Kernel source: Ubuntu linux-nvidia-7.0 7.0.0-1022.23~24.04.1,
+original source plus vendor diff plus Josephine's allocator.patch.
+Input SHA256 values are in build.sh; original.config is the extracted vendor config.
+Native Ubuntu 24.04 GCC13.3.0, binutils2.42, pahole1.25.
+No upstream source/signature authenticity claim beyond the recorded hash checks.
+Cached Arch packages were separately verified with pacman-key; see pins/provenance.json.
+
+hp-firmware-idle.patch: opt-in exact-DMI firmware-coordinated LPI and
+tick-freezing s2idle; Ryan Hughes' DRIPS latency adjustment with saturation.
+companion/: GPL-2.0-only exported-API implementation of NVIDIA LPS0 protocol
+(NVIDIA/NV-Kernels PR656 / Kaushal Rajeev Butala), with PR1958 late/early
+EC settling and Ryan Hughes' PCI-PM L1.2 mask. Original path was missing LPS0.
+Omarchy references b1b4608a90eb3c4e0cd12905434def2798f6e85a
+and PR1958 e84963c2d9ffdeaa730e7cddc41e429802c01564.
+
+1096-eint-wake.patch: unchanged NVIDIA patch by Kaushal Rajeev Butala,
+0f0aeba492533b9dba991f131289d4a17c1f3c5d, from the above Omarchy tree.
+Its authorship, sign-off and patch bytes are retained. GPL-2.0-only.
+The HP kernel diff and allocator patch also modify GPL kernel source.
+
+Trial command line additionally needs:
+processor.hp_n1x_firmware_idle=1 hp_spark_wake_trial=1
+nvme.quirks=1e81:6d14:simple_suspend
+Exact drive: Ramaxel RPEYJ1TBMNV1QWX / HPS1, PCI 1e81:6d14.
+Do not apply the quirk indiscriminately to replacement drives.
+Do not combine this companion with an in-kernel LPS0 implementation.
+
+Physical validation: one HP, short s2idle tests. Latest trial consumed
+0.047Wh over 142.996s (137.779s suspended): 1.183W whole interval.
+Wake was observed; kernel wake IRQ was internal touchpad. Lid-only wake
+is not confirmed. Long/overnight/repeated-cycle/Omarchy validation pending.
+deep mode immediately resumed and is not a qualified sleep path.
+See docs/sleep.md for warnings observed during resume and measurement limits.
+
+No AML tables, proprietary tuning blobs, kernel/module binaries or private
+signing keys are distributed here. Working directories contain local build
+outputs; do not publish them as release assets without a separate license,
+complete corresponding-source and signing/provenance review.

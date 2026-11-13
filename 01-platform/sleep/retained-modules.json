@@ -1,0 +1,55 @@
+{
+  "rebuilt_symvers_sha256": "d0dc09557e0950b84168517885e8f476c9167361cce4bde2ed7393921f42ffb8",
+  "modules": [
+    {
+      "module": "hid-asus.ko",
+      "uncompressed_sha256": "608b9297256b1e6b60fb26589777546a67f6aa2a615a8498ade8e37b8aa8e617",
+      "imports_checked": 55,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    },
+    {
+      "module": "mt8901-acp-sdw-legacy-mach.ko",
+      "uncompressed_sha256": "82061bce3a3b649c9f351b398c59546c8a978b2c3badbaa07436e6221e91d5de",
+      "imports_checked": 38,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    },
+    {
+      "module": "nvidia-drm.ko",
+      "uncompressed_sha256": "9b0ceddf9da11337e9b9af1dd1c77e81fc3559cc1bfcdcc67cccd604d72e83bf",
+      "imports_checked": 280,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    },
+    {
+      "module": "soundwire-mtk.ko",
+      "uncompressed_sha256": "5e91ec51a90ea348ab4c20d3a92e83f0cb1f6d50fcadf8108368f90a57dd933b",
+      "imports_checked": 89,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    },
+    {
+      "module": "nvidia-modeset.ko.zst",
+      "uncompressed_sha256": "14e33fc5d00e25b4d22a33f32b73348a5360e804b79ca3e239a2372d364911d9",
+      "imports_checked": 91,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    },
+    {
+      "module": "nvidia-uvm.ko.zst",
+      "uncompressed_sha256": "024a8e836e8e788fe07b4564048de2e37c7462e61b4af6a9f4ac5e4960cc89b5",
+      "imports_checked": 326,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    },
+    {
+      "module": "nvidia.ko.zst",
+      "uncompressed_sha256": "530f097aa61c9939acf8f827135cd692d581f65036548d3a2fe282c8ce07b3cd",
+      "imports_checked": 481,
+      "all_import_crcs_match": true,
+      "has_coupled_btf": false
+    }
+  ],
+  "all_passed": true
+}

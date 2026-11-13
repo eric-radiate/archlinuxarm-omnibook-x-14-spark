@@ -20,9 +20,11 @@ The speaker route refuses any other board.
   calibration for this board.
 - The NPU, the fingerprint reader, and the touchscreen are not set up here.
   Internal microphone capture is the long-running route in [Audio](audio.md).
-- Suspend and wake are unverified. The logind drop-in sets lid and
-  suspend-key handling to suspend. That policy was saved on the reference
-  machine and was not exercised with a suspend cycle.
+- The complete experimental Arch sleep kernel passed a short low-power
+  suspend/resume test (about 1.18 W over 143 seconds). Sustained sleep,
+  repeated cycles, lid-only wake and Omarchy remain unqualified. The original
+  kernel consumed about 14–16 W during sleep. The logind drop-in alone does
+  not fix this. See [Sleep](sleep.md) for evidence and required components.
 - The desktop bar in [Desktop](desktop.md) is optional. Installing it
   overwrites the user's Waybar, SwayNC, hypridle, and panel-helper files.
   Walk-away blanking reads the camera presence sensor directly.
@@ -44,8 +46,10 @@ The speaker route refuses any other board.
   on this HP uses the route in [Audio](audio.md). A package update can mute
   the amps again until `hp-audio-route.py` runs.
 - `02-drivers/soundwire/match-two-amps.sh` edits `soundwire-mtk.ko` on disk.
-  Reinstalling that module brings back the four-amp link-0 count until the
-  script is run again.
+  It accepts only the reviewed unsigned legacy module, rebuilds and verifies
+  its initramfs copy, and keeps recovery files. Reinstalling the package
+  replaces the edit. Omarchy already carries a separate two-amp source
+  topology; this binary workaround must not be used there.
 - `CoherentGPUMemoryMode` selects driver memory management. It does not change
   the firmware DRAM reservation. See [Memory](memory.md). This tree does not
   write EFI memory-reservation variables.

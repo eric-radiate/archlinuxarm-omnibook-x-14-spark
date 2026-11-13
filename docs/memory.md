@@ -20,8 +20,15 @@ Two settings show up in boot logs and in the driver, and they are different:
 | `sudo bash 02-drivers/nvidia-display/vram-mode.sh shared` | `NVreg_CoherentGPUMemoryMode=numa` and `uvm_disable_sam_migration=0` |
 
 The file is `/etc/modprobe.d/hp-omnibook-vram.conf`. The script rebuilds the
-initramfs with `mkinitcpio -P` and applies the mode on the next boot. With no
+initramfs with `mkinitcpio -p linux-n1x-nvidia-bin` and applies the mode on the next boot. With no
 arguments it prints the running mode, the saved mode, and `MemTotal`.
+
+Changes require the original pinned HP kernel/preset, not a bind-mounted
+sleep-trial module tree. On build failure the script restores this invocation's
+configuration state and rebuilds it. An absent original file stays absent even
+when an old `.bak` exists. If that recovery build also fails, keep the current
+session open and use the saved boot image or ARM recovery USB; do not reboot
+into an incomplete image.
 
 `shared` does not move the firmware reservation. Check the kernel `Memory:`
 line and `MemTotal` after reboot before treating the pool size as changed.

@@ -34,11 +34,11 @@ this repository, on AC power:
 sudo bash 01-platform/acpi/fix-hp-battery.sh
 ```
 
-The script installs `acpica` if `iasl` is missing, builds
-`/etc/initcpio/acpi_override/hp-omnibook-battery.aml` from this machine's
-tables, adds the `acpi_override` hook next to `h7607a-preload` when that hook
-list is the upstream one, and runs `mkinitcpio -P`. Reboot into the new
-initramfs and check `/sys/class/power_supply`. Details are in [ACPI](acpi.md).
+The script applies the exact-hash, length-preserving AML fix to the local
+DSDT. It checks both override directories, reuses an identical existing table,
+keeps recovery copies and rebuilds only the pinned preset. It does not require
+iasl or a firmware download. See [ACPI](acpi.md) for checks and concrete recovery
+steps before rebooting.
 
 ## 3. Camera
 
@@ -60,7 +60,9 @@ The internal camera is USB `30c9:00fb`.
 sudo pacman -S --needed bluez bluez-utils alsa-utils rtkit
 sudo systemctl enable --now bluetooth.service
 sudo systemctl start rtkit-daemon.service
-sudo usermod -aG audio,video,lp,input "$SUDO_USER"
+# Run from the intended desktop user's shell, before entering a root shell.
+desktop_user=$(id -un)
+sudo usermod -aG audio,video,lp,input "$desktop_user"
 sudo bash 03-system/policy/install-wireless-regdb.sh
 ```
 
@@ -88,10 +90,15 @@ bash 03-system/check/check-after-boot.sh
 `01-platform/acpi/collect-acpi.sh DEST_DIR` copies DSDT, SSDT, and FACP tables for
 inspection. It skips MSDM. Point `DEST_DIR` outside this repository.
 
-## 7. Lid and suspend keys
+## 7. Experimental sleep qualification
 
-The upstream package ignores lid and suspend-key events. To restore suspend
-handling:
+The upstream package ignores lid and suspend-key events. The original kernel
+used around 14–16 W in our sleep tests. **Do not enable automatic lid suspend
+as a stand-alone fix.** Review [Sleep](sleep.md), build/boot the complete trial,
+and qualify power and wake on a ventilated desk first.
+
+Only after qualification, the policy file below enables lid/suspend-key
+handling; it provides no kernel or firmware power fix:
 
 ```bash
 sudo install -D -m 0644 03-system/policy/logind/70-hp-enable-sleep.conf \
@@ -99,8 +106,8 @@ sudo install -D -m 0644 03-system/policy/logind/70-hp-enable-sleep.conf \
 ```
 
 Leave the running logind alone. Restarting it drops DRM session control for
-the live compositor. The file is read on a later boot. Suspend and wake have
-not been verified. See [Limits](limits.md).
+the live compositor. The file is read on a later boot. Verify the intended
+kernel and all trial components after that boot. See [Limits](limits.md).
 
 ## 8. Driver memory mode
 

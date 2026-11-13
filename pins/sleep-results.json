@@ -1,0 +1,33 @@
+{
+  "kernel": "#25~hp-sleep-wake1 SMP PREEMPT_DYNAMIC 2026-11-11 20:00:00 UTC",
+  "sample_seconds": 142.99588751792908,
+  "suspended_seconds": 137.77895022400003,
+  "awake_overhead_seconds": 5.21693729392905,
+  "energy_Wh": 0.047,
+  "whole_interval_average_W": 1.1832508118723721,
+  "unplugged_at_both_endpoints": true,
+  "same_boot": true,
+  "user_report": "yeah it worked now; it woke",
+  "wake_observation": "Kernel recorded IRQ90 (touchpad) as wake source. Logind lid-open coincides with resume, with no power-key event. Asked user whether opening lid alone lit display or an input was needed. Lid-only wake remains unconfirmed.",
+  "outcome": "Short low-power suspend/resume passed. Kernel reports the touchpad wake route; exact physical trigger awaiting user clarification. No failed system units or matching NVMe/ACPI failures.",
+  "limits": "Short sample includes transition overhead and gauge timing; no sustained power or physical DRIPS-residency percentage claimed.",
+  "remaining": [
+    "Confirm wake was from opening lid alone.",
+    "30-60minute or longer unplugged desk measurement and repeated wake cycles.",
+    "Separate internal input wake test if needed; current generic USB remote-wake patches remain unapplied."
+  ],
+  "pm_wakeup_irq": 90,
+  "irq90_identity": "mt-eint43, SYNA3536 internal I2C touchpad",
+  "resume_warnings": [
+    "queueing ieee80211 work while going to suspend",
+    "mtk-soundwire NVDA9100:00: [0]control bus clash 0x80000400"
+  ],
+  "recorded_date": "2026-11-11",
+  "historical_build_outputs": {
+    "build/arch/arm64/boot/Image": "f91eaee8b1fbac717144801e048dd86c2da88626a2681a68d3e8fc54e75e5d6f",
+    "build/.config": "300b9d6316a1c772b9cb48eead848444e61d3d177daf74dee4a2007ac5e66667",
+    "build/Module.symvers": "d0dc09557e0950b84168517885e8f476c9167361cce4bde2ed7393921f42ffb8"
+  },
+  "historical_companion_sha256": "c4ed770bfdf8c2a8a2e3aa5adb90f3c2c4ba7db91316efd15db2e867313c468a",
+  "measurement_scope": "Sanitized summary from the local trial; raw device logs and binaries are not distributed."
+}

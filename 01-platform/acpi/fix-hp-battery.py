@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-"""Enlarge the HP OmniBook FFA0.RBUF buffer that ACPI rejects.
+"""Legacy ASL experiment: NOT the default or hardware-tested installer.
+
+Enlarge the HP OmniBook FFA0.RBUF buffer that ACPI rejects.
 
 The kernel reports:
 

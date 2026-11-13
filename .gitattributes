@@ -1,0 +1,2 @@
+# Patch context uses leading spaces before tabs; preserve upstream patch bytes.
+*.patch -whitespace

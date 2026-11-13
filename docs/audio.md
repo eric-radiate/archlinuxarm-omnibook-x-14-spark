@@ -7,8 +7,20 @@ two CS35L56 amplifiers.
 The upstream `soundwire-mtk.ko` machine `mtk_sdw_cs35l56_l0_cs42l43_l1`
 expects four amplifiers on link 0. This board has two, unique ids 0 and 1,
 plus the CS42L43 on link 1. `02-drivers/soundwire/match-two-amps.sh` changes that count in
-the installed module and leaves a backup in `/var/lib/hp-omnibook/`. Reboot
-after it runs. Reinstalling the module package restores the four-amp table.
+the exact reviewed unsigned legacy module. It checks complete input/output
+hashes, saves the module and previous initramfs under
+`/var/lib/hp-omnibook/transactions/`, rebuilds the pinned preset and extracts
+the result to verify the embedded module. A failed build or verification
+restores the previous files. Recovery uses `lib/hp_boot.py restore` as
+described in [ACPI recovery](acpi.md). Reboot after it succeeds. Reinstalling
+the package restores the four-amp table.
+
+This workaround has not been run through a new physical installation during
+the repository review. The existing two-amp module itself was used by the
+reference machine. On current Omarchy, use its source patch
+`1061-soundwire-mediatek-add-the-HP-OmniBook-X-14-topology.patch`, which adds a
+separate two-amp topology and keeps the four-amp entry. Do not run this binary
+workaround on an Omarchy module or a signed replacement.
 
 `h7607a-hardware` can also ship `72-h7607a-no-microphone.rules` with mode
 0600 on capture PCMs. PipeWire 1.6 then ignores the whole card, speakers

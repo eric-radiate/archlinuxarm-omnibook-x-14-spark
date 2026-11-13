@@ -78,9 +78,6 @@ write_conf() {
   [[ "$mode" == dedicated ]] && nvidia_mode=driver
   [[ "$mode" == shared ]] && nvidia_mode=numa
 
-  if [[ -f "$CONF" ]]; then
-    cp -a "$CONF" "${CONF}.bak"
-  fi
   cat >"$CONF" <<EOF
 # Written by vram-mode.sh. Keep this file limited to the two lines below.
 # dedicated -> NVreg_CoherentGPUMemoryMode=driver
@@ -96,18 +93,52 @@ rebuild() {
     echo "missing initramfs preset: $PRESET" >&2
     return 1
   fi
-  mkinitcpio -P
+  mkinitcpio -p linux-n1x-nvidia-bin
 }
 
-restore_conf() {
-  if [[ -f "${CONF}.bak" ]]; then
-    mv -f "${CONF}.bak" "$CONF"
-    echo "restored ${CONF} from backup" >&2
-  else
-    rm -f "$CONF"
-    echo "removed $CONF" >&2
+change_mode() (
+  local mode=$1 saved had_conf=0 changed=0
+  [[ ! -L "$CONF" ]] || { echo "refusing symlink: $CONF" >&2; return 1; }
+  saved=$(mktemp "${CONF}.rollback.XXXXXX") || return 1
+  if [[ -f "$CONF" ]]; then
+    had_conf=1
+    cp -a -- "$CONF" "$saved" || { rm -f -- "$saved"; return 1; }
   fi
-}
+  cleanup() {
+    local result=$?
+    trap - EXIT INT TERM
+    if (( changed )); then
+      if (( had_conf )); then
+        if ! cp -a -- "$saved" "$CONF"; then
+          echo "Configuration restore failed; recovery copy retained at $saved" >&2
+          exit 1
+        fi
+      else
+        rm -f -- "$CONF" || exit 1
+      fi
+      # A failed build can already have replaced one of its outputs.
+      if ! rebuild; then
+        echo "Recovery rebuild failed. Keep this session open and use the saved boot/USB recovery path." >&2
+        result=1
+      fi
+    fi
+    rm -f -- "$saved"
+    exit "$result"
+  }
+  trap cleanup EXIT
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  changed=1
+  write_conf "$mode" || return 1
+  rebuild || return 1
+  changed=0
+)
+
+main() {
+if (( $# > 2 )); then
+  usage >&2
+  return 2
+fi
 
 cmd=${1:-status}
 reboot_after=0
@@ -131,11 +162,10 @@ case "$cmd" in
       echo "run: sudo bash $0 $cmd" >&2
       exit 1
     fi
-    write_conf "$cmd"
-    if ! rebuild; then
-      echo "initramfs rebuild failed. The running mode is unchanged." >&2
-      restore_conf
-      exit 1
+    python3 "$(dirname -- "$0")/../../lib/hp_boot.py" guard || return 1
+    if ! change_mode "$cmd"; then
+      echo "initramfs rebuild failed; the previous configuration was restored." >&2
+      return 1
     fi
     echo
     status
@@ -150,3 +180,8 @@ case "$cmd" in
     exit 2
     ;;
 esac
+}
+
+if [[ ${BASH_SOURCE[0]} == "$0" ]]; then
+  main "$@"
+fi

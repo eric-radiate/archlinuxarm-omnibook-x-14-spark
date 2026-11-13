@@ -22,5 +22,6 @@
     "linux-firmware-mediatek": "20260916-1",
     "linux-firmware-cirrus": "20260916-1",
     "linux-firmware-whence": "20260916-1"
-  }
+  },
+  "source_commit": "3484cc008a9ee00b34c086c729e28e935cbc3430"
 }

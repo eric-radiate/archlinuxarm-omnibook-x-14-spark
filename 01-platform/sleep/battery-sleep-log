@@ -1,0 +1,103 @@
+#!/usr/bin/python3
+# SPDX-License-Identifier: MIT
+"""Record battery energy around systemd sleep; never block sleep on errors."""
+import json
+import os
+import pathlib
+import sys
+import time
+
+ROOT = pathlib.Path('/var/lib/battery-sleep-log')
+
+def snapshot():
+    batteries = {}
+    external = {}
+    for supply in pathlib.Path('/sys/class/power_supply').iterdir():
+        def read(name):
+            path = supply / name
+            return path.read_text().strip() if path.exists() else None
+        if read('type') == 'Battery':
+            batteries[supply.name] = {key: read(key) for key in
+                                     ('energy_now', 'energy_full', 'capacity', 'status')}
+        elif read('online') is not None:
+            external[supply.name] = read('online')
+    domains = {}
+    for domain in pathlib.Path('/sys/kernel/debug/pm_genpd').glob('ACPI0010:*'):
+        for key in ('idle_states', 'idle_states_desc', 'state_disable'):
+            path = domain / key
+            if path.is_file():
+                try:
+                    domains[f'{domain.name}/{key}'] = path.read_text()
+                except OSError:
+                    pass
+    # The standard firmware counters returned EFAULT on this HP; use the
+    # kernel's exposed per-state accounting instead of retrying raw reads.
+    firmware = {'unavailable': 'not exposed by this HP kernel'}
+    cpu_idle = {}
+    for cpu in ('cpu0', 'cpu10'):
+        directory = pathlib.Path('/sys/devices/system/cpu') / cpu / 'cpuidle'
+        for state in directory.glob('state*'):
+            for key in ('usage', 'rejected', 'time', 's2idle/usage', 's2idle/time'):
+                path = state / key
+                if path.is_file():
+                    cpu_idle[f'{cpu}/{state.name}/{key}'] = path.read_text().strip()
+    wakeups = pathlib.Path('/sys/kernel/debug/wakeup_sources')
+    return dict(time=time.time(), monotonic=time.monotonic(),
+                boottime=time.clock_gettime(time.CLOCK_BOOTTIME),
+                boot_id=pathlib.Path('/proc/sys/kernel/random/boot_id').read_text().strip(),
+                batteries=batteries, external=external, domains=domains,
+                selected_sleep_mode=pathlib.Path('/sys/power/mem_sleep').read_text().strip(),
+                firmware=firmware, cpu_idle=cpu_idle,
+                wakeup_sources=wakeups.read_text() if wakeups.is_file() else '')
+
+def main():
+    ROOT.mkdir(mode=0o755, parents=True, exist_ok=True)
+    now = snapshot()
+    state = ROOT / 'before.json'
+    if sys.argv[1] == 'pre':
+        if state.exists():
+            incomplete = dict(before=json.loads(state.read_text()),
+                              next_attempt=now, event='previous_sleep_has_no_post_record')
+            with (ROOT / 'incomplete.jsonl').open('a') as output:
+                output.write(json.dumps(incomplete) + '\n')
+        state.write_text(json.dumps(now))
+        # Preserve the last pre-sleep snapshot even if the system loses power.
+        with state.open('r') as saved:
+            os.fsync(saved.fileno())
+        directory = os.open(ROOT, os.O_RDONLY | os.O_DIRECTORY)
+        try:
+            os.fsync(directory)
+        finally:
+            os.close(directory)
+        return
+    if sys.argv[1] != 'post' or not state.exists():
+        return
+    before = json.loads(state.read_text())
+    record = dict(before=before, after=now, operation=sys.argv[2])
+    hours = (now['time'] - before['time']) / 3600
+    record['hours'] = hours
+    if before.get('boot_id') == now['boot_id'] and 'boottime' in before:
+        record['suspended_seconds'] = max(0,
+            (now['boottime'] - before['boottime']) -
+            (now['monotonic'] - before['monotonic']))
+    record['battery_measurements'] = {}
+    for name, batt in now['batteries'].items():
+        old = before['batteries'].get(name, {})
+        if batt.get('energy_now') is None or old.get('energy_now') is None:
+            continue
+        wh = (int(old['energy_now']) - int(batt['energy_now'])) / 1e6
+        record['battery_measurements'][name] = dict(
+            energy_lost_Wh=wh, average_W=wh / hours if hours > 0 else None)
+    # External power at either endpoint makes the discharge rate inconclusive.
+    record['external_power_at_endpoint'] = any(
+        value == '1' for point in (before, now) for value in point['external'].values())
+    with (ROOT / 'sessions.jsonl').open('a') as output:
+        output.write(json.dumps(record) + '\n')
+    state.unlink()
+    print('battery-sleep-log: ' + json.dumps(record), flush=True)
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as exc:
+        print(f'battery-sleep-log: {exc}', file=sys.stderr)

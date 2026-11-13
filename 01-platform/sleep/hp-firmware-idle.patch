@@ -1,0 +1,70 @@
+--- a/drivers/acpi/processor_idle.c
++++ b/drivers/acpi/processor_idle.c
+@@ -156,6 +156,20 @@
+ static DEFINE_PER_CPU(struct cpuidle_driver *, acpi_idle_cpu_driver);
+ static bool acpi_idle_uses_per_cpu_drivers;
+ static bool acpi_lpi_topology_mode;
++
++/* Opt-in diagnostic for the exact HP firmware reviewed with this build. */
++static bool hp_n1x_firmware_idle;
++module_param(hp_n1x_firmware_idle, bool, 0400);
++MODULE_PARM_DESC(hp_n1x_firmware_idle,
++	"Test firmware-coordinated LPI on HP OmniBook X 14-ks000 BIOS F.05");
++
++static bool hp_n1x_firmware_idle_requested(void)
++{
++	return hp_n1x_firmware_idle &&
++		dmi_match(DMI_PRODUCT_NAME, "HP OmniBook X Laptop 14-ks000") &&
++		dmi_match(DMI_BOARD_NAME, "8F22") &&
++		dmi_match(DMI_BIOS_VERSION, "F.05");
++}
+ 
+ static bool acpi_lpi_uses_topology(void)
+ {
+@@ -1042,6 +1056,11 @@
+ 
+ static bool acpi_lpi_can_coordinate(void)
+ {
++	if (hp_n1x_firmware_idle_requested()) {
++		pr_info_once("HP N1X trial: using firmware-coordinated LPI\n");
++		return false;
++	}
++
+ 	/* The arm64 FFH hooks are intentionally not linked to processor.ko. */
+ 	return IS_BUILTIN(CONFIG_ACPI_PROCESSOR) &&
+ 	       osc_os_lpi_support_confirmed &&
+@@ -2412,6 +2431,25 @@
+ 	return __acpi_idle_lpi_enter_domain(dev, drv, index, true);
+ }
+ 
++static void hp_n1x_prepare_flat_lpi_state(const struct acpi_lpi_state *lpi,
++					struct cpuidle_state *state,
++					unsigned int index)
++{
++	if (!hp_n1x_firmware_idle_requested() || !index ||
++	    lpi->entry_method != ACPI_CSTATE_FFH)
++		return;
++
++	/* Ryan Hughes' N1x DRIPS selection quirk, with saturating arithmetic. */
++	if (lpi->min_residency == U32_MAX) {
++		if (state->exit_latency > U32_MAX - 6610)
++			state->exit_latency = U32_MAX;
++		else
++			state->exit_latency += 6610;
++	}
++	/* FFH entry preserves disabled IRQs; freeze the tick/timekeeping too. */
++	state->enter_s2idle = acpi_idle_lpi_enter_direct;
++}
++
+ static void acpi_processor_setup_lpi_states(struct acpi_processor *pr,
+ 					    struct cpuidle_driver *drv,
+ 					    bool coordinated)
+@@ -2440,6 +2478,8 @@
+ 		strscpy(state->desc, lpi->desc, CPUIDLE_DESC_LEN);
+ 		state->exit_latency = lpi->wake_latency;
+ 		state->target_residency = lpi->min_residency;
++		if (!coordinated)
++			hp_n1x_prepare_flat_lpi_state(lpi, state, i);
+ 		state->exit_latency_ns =
+ 			mul_u32_u32(state->exit_latency, NSEC_PER_USEC);
+ 		state->target_residency_ns =

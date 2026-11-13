@@ -1,0 +1,8 @@
+#!/bin/bash
+# SPDX-License-Identifier: MIT
+build() {
+    add_runscript
+}
+help() {
+    echo 'Use the matching HP trial modules after switching to the real root.'
+}
