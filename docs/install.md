@@ -81,6 +81,11 @@ Reboot after the amp match. Then follow [Audio](audio.md) for
 `hp-audio-route.py` and, if you want the internal microphone, for
 `hp-microphone.py`.
 
+The route fixes do not install the CS35L56 OEM tuning. Matching files have
+been identified in HP recovery media, but have not been loaded or qualified
+on Linux. Read [Speaker tuning](speaker-tuning.md) for the source, per-amp
+mapping, licensing limits and checks to perform on the HP before installation.
+
 ## 6. After reboot
 
 ```bash

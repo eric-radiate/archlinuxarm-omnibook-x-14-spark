@@ -22,7 +22,7 @@ were taken from that system.
 | --- | --- |
 | NVIDIA display and unified memory | Running with the pinned stack; driver memory mode selectable |
 | Battery, AC and thermal methods | Tested minimal, exact-hash local DSDT fix |
-| Speakers / microphone | HP routes work; genuine HP speaker-protection tuning is missing |
+| Speakers / microphone | HP routes work; matching speaker tuning found in recovery media, Linux loading untested |
 | Keyboard, touchpad, Wi-Fi, Bluetooth, UVC camera | Observed on the reference system; see hardware notes |
 | Keyboard backlight | Firmware F10 key; no Linux LED control in this kernel |
 | Sleep | Patched-kernel short test: about 1.18 W; sustained sleep and lid-only wake unqualified |
@@ -43,6 +43,7 @@ upstream project. This repository is not published by those companies.
 | [Hardware](docs/hardware.md) | Board, packages, boot, and the devices this tree covers |
 | [ACPI](docs/acpi.md) | The battery override, built on the machine |
 | [Audio](docs/audio.md) | Speaker route for the HP SoundWire card |
+| [Speaker tuning](docs/speaker-tuning.md) | Verified HP recovery source, file mapping and remaining Linux checks |
 | [Memory](docs/memory.md) | The shared DRAM pool and the driver mode switch |
 | [Sleep](docs/sleep.md) | Tested source changes, measurements, recovery and Omarchy port gaps |
 | [Limits](docs/limits.md) | Firmware pin, missing pieces, unverified behavior |

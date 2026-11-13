@@ -38,6 +38,25 @@ redistribution rights or certify HP functionality. The record in
 [pins/provenance.json](../pins/provenance.json) distinguishes verified package
 signatures from source inputs checked only by hash.
 
+## HP speaker firmware
+
+The [speaker tuning record](speaker-tuning.md) publishes independently written
+observations, filenames, mappings and archive metadata. It does not include
+HP's recovery image, Windows driver package, INF text or firmware binaries.
+The repository's MIT license does not grant rights to those separate inputs.
+
+The [U.S. Copyright Office distinguishes facts and discoveries from protected expression](https://www.copyright.gov/what-is-copyright/).
+The recovery source is reported as factual provenance in original prose.
+
+[HP's general software EULA](https://support.hp.com/us-en/document/ish_4416646-4390016-16)
+describes use on a single HP product, withholds general distribution rights,
+and has a separate restriction on use of recovery solutions. Separate supplier
+terms can apply. No package-specific grant permitting redistribution or use
+of these extracted files under Linux has been established in this review.
+The `LICENSE.cirrus` shipped by linux-firmware does not by itself establish
+that the HP Windows package was supplied under that license. Keep the HP
+files out of git; the technical inventory is not a licensing clearance.
+
 These are compliance measures and a scoped source review, not a legal opinion
 or a guarantee against patent, trademark or other claims. Obtain legal advice
 before a commercial or binary redistribution that goes beyond this tree.

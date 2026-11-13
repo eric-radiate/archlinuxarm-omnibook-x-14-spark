@@ -17,7 +17,10 @@ The speaker route refuses any other board.
 - CS35L56 speaker tuning firmware for board 8F22 is not included. On
   2026-11-02 the amps logged `FIRMWARE_MISSING` and stayed on ROM firmware
   3.4.4. The ASUS tuning files belong to the ProArt and are the wrong
-  calibration for this board.
+  calibration for this board. Matching HP files were found in an owner-created
+  recovery image on 2026-11-12; archive integrity and driver metadata were
+  checked, but Linux loading and sound with that tuning remain untested. See
+  [Speaker tuning](speaker-tuning.md) for the exact source and file mapping.
 - The NPU, the fingerprint reader, and the touchscreen are not set up here.
   Internal microphone capture is the long-running route in [Audio](audio.md).
 - The complete experimental Arch sleep kernel passed a short low-power

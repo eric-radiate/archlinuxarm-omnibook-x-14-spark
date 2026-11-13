@@ -69,6 +69,19 @@ PipeWire logs a missing RTKit service until `rtkit` is installed and
 `rtkit-daemon.service` is running. Install that package with the session
 packages in [Installing](install.md).
 
+## Speaker tuning
+
+The reference machine produced speaker audio while the CS35L56 amps reported
+missing OEM firmware. On 2026-11-12, an owner-created HP Cloud Recovery USB
+was inspected read-only on another computer. Its Windows image contains the
+8F22-specific tuning and matching DSP firmware 3.13.5. The driver metadata
+confirms the board and the left/right SoundWire mapping.
+
+See [Speaker tuning](speaker-tuning.md) for the recovery image identity,
+original filenames, expected Linux names and read-only checks. These files
+have not been installed or tested on the HP under Linux. No tuned/ROM audio
+comparison has been measured. Firmware binaries are not included in this tree.
+
 ## Microphone
 
 `03-system/input-audio/hp-microphone.py` opens the internal microphone while it is running:
@@ -87,5 +100,4 @@ systemctl --user enable --now hp-microphone.service
 The reference machine confirmed speech through this source. Gain is +18 dB
 on the two decimators.
 
-The CS35L56 amplifiers still want HP tuning firmware for board 8F22. See
-[Limits](limits.md).
+The CS35L56 speaker tuning is separate from this CS42L43 microphone route.
