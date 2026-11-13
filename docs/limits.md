@@ -17,10 +17,11 @@ The speaker route refuses any other board.
 - CS35L56 speaker tuning firmware for board 8F22 is not included. On
   2026-11-02 the amps logged `FIRMWARE_MISSING` and stayed on ROM firmware
   3.4.4. The ASUS tuning files belong to the ProArt and are the wrong
-  calibration for this board. Matching HP files were found in an owner-created
-  recovery image on 2026-11-12; archive integrity and driver metadata were
-  checked, but Linux loading and sound with that tuning remain untested. See
-  [Speaker tuning](speaker-tuning.md) for the exact source and file mapping.
+  calibration for this board. On 2026-11-13 both amps loaded the matching HP
+  firmware 3.13.5, separate tuning and factory calibration on the reference
+  machine, and the owner confirmed stereo playback. No controlled comparison
+  of loudness, bass, distortion or protection was performed. See
+  [Speaker tuning](speaker-tuning.md) for the source and mapping.
 - The NPU, the fingerprint reader, and the touchscreen are not set up here.
   Internal microphone capture is the long-running route in [Audio](audio.md).
 - The complete experimental Arch sleep kernel passed a short low-power
@@ -28,6 +29,13 @@ The speaker route refuses any other board.
   repeated cycles, lid-only wake and Omarchy remain unqualified. The original
   kernel consumed about 14–16 W during sleep. The logind drop-in alone does
   not fix this. See [Sleep](sleep.md) for evidence and required components.
+- The reference default now combines that sleep kernel with OEM audio.
+  The previous short power result predates the audio firmware change; a
+  physical sleep/power test with the combined audio set remains pending.
+- The current sleep companion and NVMe quirk are scoped to the Ramaxel SSD.
+  A replacement needs its own power/wake qualification. The
+  [migration helper](nvme-migration.md) backs up the setup and pauses sleep;
+  it does not clone a disk or establish SN8100 compatibility.
 - The desktop bar in [Desktop](desktop.md) is optional. Installing it
   overwrites the user's Waybar, SwayNC, hypridle, and panel-helper files.
   Walk-away blanking reads the camera presence sensor directly.

@@ -81,10 +81,11 @@ Reboot after the amp match. Then follow [Audio](audio.md) for
 `hp-audio-route.py` and, if you want the internal microphone, for
 `hp-microphone.py`.
 
-The route fixes do not install the CS35L56 OEM tuning. Matching files have
-been identified in HP recovery media, but have not been loaded or qualified
-on Linux. Read [Speaker tuning](speaker-tuning.md) for the source, per-amp
-mapping, licensing limits and checks to perform on the HP before installation.
+The route fixes do not install CS35L56 OEM tuning. The reference HP now loads
+the recovery-supplied firmware, per-amp tuning and factory calibration, with
+stereo playback confirmed. Read [Speaker tuning](speaker-tuning.md) for the
+HP identity source patch, exact local input hashes and post-boot checks.
+The firmware remains a separate local input; this tree does not supply it.
 
 ## 6. After reboot
 
@@ -113,6 +114,17 @@ sudo install -D -m 0644 03-system/policy/logind/70-hp-enable-sleep.conf \
 Leave the running logind alone. Restarting it drops DRM session control for
 the live compositor. The file is read on a later boot. Verify the intended
 kernel and all trial components after that boot. See [Limits](limits.md).
+
+After qualifying a one-boot trial, maintainers can prepare the
+[single combined default](combined-boot.md). That helper is for the exact
+reviewed EFI-shell layout, requires the original kernel while preparing,
+and retains a verified boot backup and the original recovery files. Once
+the combined module tree is active, use its matching initramfs preset;
+the original #23 installers above deliberately refuse that running kernel.
+
+Before replacing the reference Ramaxel SSD, review
+[SSD migration](nvme-migration.md). The existing power result does not qualify
+a different drive, including an SN8100.
 
 ## 8. Driver memory mode
 

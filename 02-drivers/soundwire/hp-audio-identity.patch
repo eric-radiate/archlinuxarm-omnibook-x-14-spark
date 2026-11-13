@@ -1,0 +1,47 @@
+SPDX-License-Identifier: GPL-2.0-only
+
+Set the HP 8F22/F.05 card identity before codec binding.
+Based on MediaTek audio-source.c as carried by Josephine Pfeiffer at
+3484cc008a9ee00b34c086c729e28e935cbc3430. Preserve existing source notices
+and the existing ASUS match. No new contributor sign-off is asserted.
+
+--- a/sound/soc/mediatek/mt8901/mt8901-acp-sdw-legacy-mach.c
++++ b/sound/soc/mediatek/mt8901/mt8901-acp-sdw-legacy-mach.c
+@@ -547,6 +547,23 @@
+ 	return ret;
+ }
+ 
++static void mt8901_set_oem_ssid(struct snd_soc_card *card)
++{
++	if (dmi_match(DMI_SYS_VENDOR, "ASUS") &&
++	    dmi_match(DMI_PRODUCT_NAME, "ProArt P16 H7607BA") &&
++	    dmi_match(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC.") &&
++	    dmi_match(DMI_BOARD_NAME, "H7607BA"))
++		snd_soc_card_set_pci_ssid(card, 0x1043, 0x1484);
++
++	/* HP F.05 reports SoundWire subsystem ID 8F22103C. */
++	if (dmi_match(DMI_SYS_VENDOR, "HP") &&
++	    dmi_match(DMI_PRODUCT_NAME, "HP OmniBook X Laptop 14-ks000") &&
++	    dmi_match(DMI_BOARD_VENDOR, "HP") &&
++	    dmi_match(DMI_BOARD_NAME, "8F22") &&
++	    dmi_match(DMI_BIOS_VERSION, "F.05"))
++		snd_soc_card_set_pci_ssid(card, 0x103c, 0x8f22);
++}
++
+ static int mt8901_card_probe(struct platform_device *pdev)
+ {
+ 	struct snd_soc_acpi_mach *mach = dev_get_platdata(&pdev->dev);
+@@ -625,12 +642,7 @@
+ 		}
+ 	}
+ 
+-	/* OEM SoundWire identity used by the CS35L56 firmware lookup. */
+-	if (dmi_match(DMI_SYS_VENDOR, "ASUS") &&
+-	    dmi_match(DMI_PRODUCT_NAME, "ProArt P16 H7607BA") &&
+-	    dmi_match(DMI_BOARD_VENDOR, "ASUSTeK COMPUTER INC.") &&
+-	    dmi_match(DMI_BOARD_NAME, "H7607BA"))
+-		snd_soc_card_set_pci_ssid(card, 0x1043, 0x1484);
++	mt8901_set_oem_ssid(card);
+ 
+ 	/* Register the card */
+ 	ret = devm_snd_soc_register_card(card->dev, card);

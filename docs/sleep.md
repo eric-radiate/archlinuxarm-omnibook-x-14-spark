@@ -132,7 +132,23 @@ while it is bind-mounted by that running kernel.
 The original default is not made permanent by this procedure. On the
 reference machine a later ordinary reboot returned to the original kernel;
 the short sleep result does not establish that every subsequent boot has
-the fixes active.
+the fixes active. On 2026-11-13 the reference machine was subsequently moved
+to a [single combined default](combined-boot.md), retaining that same kernel
+and matching modules while adding the verified OEM audio setup. Its boot
+admission checks pass and stereo playback and microphone capture work.
+Physical sleep with the new audio set has not yet been tested; the measured
+1.18 W above remains the earlier trial's result.
+
+`prepare-combined.py` records the later promotion workflow, including full
+boot backup, off-ESP image generation, embedded module/firmware verification,
+archiving test entries, and keeping the original recovery files. Its portable
+input wrapper has temporary-filesystem recovery tests; it has not been used
+for another fresh physical installation. It does not rerun on an already
+promoted machine or qualify its inputs automatically.
+
+For a future drive replacement, see [SSD migration](nvme-migration.md).
+The helper pauses sleep until the new SSD has been qualified; it does not
+apply the Ramaxel quirk to another vendor/device ID.
 
 `battery-sleep-log` is an optional systemd system-sleep logger. It records
 local battery and timing data without changing sleep policy. Keep raw logs

@@ -2,15 +2,16 @@
 
 Matching OEM speaker files have been located for the HP OmniBook X Laptop
 14-ks000, board **8F22**. This is a record of the recovery media and its driver
-metadata, checked on 2026-11-12 Pacific time (2026-11-13 UTC) on another
-computer. The firmware has **not** been installed or tested on the HP under
-Linux. No firmware binaries were extracted during the inspection, and none
-are included in this repository.
+metadata, initially checked on 2026-11-12 Pacific time on another computer.
+On **2026-11-13**, the owner supplied that USB for a separate local extraction
+and Linux trial on the HP. Both amps now load the matching firmware and
+tuning, apply calibration and produce the correct stereo channels. No
+firmware, extracted INF text, catalog or recording is included in this tree.
 
 The existing [speaker route](audio.md) produced audio on ROM firmware 3.4.4
-with `FIRMWARE_MISSING` on 2026-11-02. Finding these files does not establish
-the loudness, bass response or protection behavior after a Linux installation.
-No tuned/ROM comparison has been measured.
+with `FIRMWARE_MISSING` on 2026-11-02. The later functional playback test does
+not measure loudness, bass response or protection behavior. No controlled
+tuned/ROM comparison has been performed.
 
 ## Recovery source
 
@@ -78,6 +79,12 @@ for checking the applicable package terms. Keep the firmware and coefficients
 as a matching set. Files for the ASUS ProArt or another HP board do not provide
 this board's tuning.
 
+The later extracted bytes were also checked with SHA-256; exact sizes and
+hashes are in [pins/hp-speaker-firmware.json](../pins/hp-speaker-firmware.json).
+The WMDR files contain an older `8e73` project filename internally. HP's
+8F22 extension INF explicitly selects the supplied 8F22 files recorded here;
+an internal text string is not a reason to substitute another board's tuning.
+
 ## SoundWire mapping and expected Linux names
 
 The HP INF maps **UID 0 to the right speaker** and **UID 1 to the left speaker**
@@ -94,10 +101,15 @@ filenames under `/usr/lib/firmware/cirrus/` are:
 | `b0_dflt_8f22_rw_l0u0.bin` | `cs35l56-b0-dsp1-misc-103c8f22-spkid0-l0u0.bin` | `cs35l56-b0-dsp1-misc-103c8f22-spkid0-amp1.bin` |
 | `b0_dflt_8f22_lw_l0u1.bin` | `cs35l56-b0-dsp1-misc-103c8f22-spkid0-l0u1.bin` | `cs35l56-b0-dsp1-misc-103c8f22-spkid0-amp2.bin` |
 
-This mapping is an installation reference, not a record of Linux load success.
-Confirm the actual system ID, speaker ID, amp prefixes and requested names on
-the HP's installed driver before using it. Vendor kernels can differ from
-their nominal upstream version. The
+The link/UID filenames above were verified on the reference HP. No legacy
+`amp1`/`amp2` aliases were needed: the B0 driver first tries its ALSA prefix,
+then falls back to `l0u0`/`l0u1`. Both amps report speaker ID **0**, so the
+`-spkid0` part is required. An initial trial omitted it and stayed on ROM;
+tracing the real requests identified the mismatch. The corrected files were
+verified inside the combined initramfs before rebooting.
+
+Confirm the actual identity and requested names on any other driver or BIOS.
+Vendor kernels can differ from their nominal upstream version. The
 [kernel CS35L56 documentation](https://docs.kernel.org/sound/codecs/cs35l56.html)
 explains firmware naming, the link/UID qualifier introduced in 6.16, and the
 need for firmware and coefficient versions to match. `patched=0` at initial
@@ -137,19 +149,94 @@ media. A later recovery release may change them; inspect its own CVA and INF
 rather than treating a similar filename as an exact match. See the upstream
 [wimlib directory-listing reference](https://wimlib.net/man1/wimdir.html).
 
-## Remaining work on the HP
+## Verified Linux result
 
-Before any installation, check the running system with
-`python3 03-system/check/check-machine.py` and capture the current CS35L56
-kernel messages. Confirm the filename requests and per-amp mapping against
-that driver. Resolve the applicable license terms for local use before
-copying files from recovery media.
+The #25 combined boot reports, for both amps:
 
-After a local installation, confirm that the matching
-`.wmfw` and each amp's `.bin` load, review calibration messages, check left
-and right playback, and compare audio at controlled settings. The expected
-sound improvement remains a prediction until that test is performed. No
-firmware installer or automatic extraction step is supplied by this update.
+- Firmware `3.13.5`, with 41 algorithms.
+- Shared `103c8f22-spkid0.wmfw` and the respective `l0u0.bin` / `l0u1.bin` loaded.
+- `Calibration applied`.
+- Tuning PID `0x103135`, TID `0x5a0618`; right SID `0x24100a`, left SID `0x24110a`.
+
+The owner confirmed correct left/right speech playback at 30% PipeWire volume
+and heard the test well at 45%. The internal microphone also captured an
+intelligible repeated test phrase. Sanitized results and the source/module
+identity are in [pins/audio-results.json](../pins/audio-results.json).
+
+Check a running reference system without changing it:
+
+```bash
+python3 03-system/check/check-hp-audio.py
+```
+
+The first `fw:3.4.4 (patched=0)` line is the initial ROM probe; it remains in
+a successful boot log. Require the later completed firmware, tuning and
+calibration messages for **both** amps. A bare `fw_patched` flag or matching
+module name is insufficient. Logs do not establish audible playback.
+
+## Stage locally supplied files
+
+Acquire the extension directory from the owner's recovery media outside this
+repository, under the applicable terms. The optional extraction below reads
+only that directory, not the full Windows image, and needs no root once the
+USB is mounted read-only:
+
+```bash
+hp_audio_extract="$HOME/hp-audio-private/extracted"
+mkdir -p -m 700 "$hp_audio_extract"
+wimlib-imagex extract "$hp_recovery_root/PRELOAD/BASE.SWM" 1 \
+  /Windows/System32/DriverStore/FileRepository/xucsmeext_8f22_fdl.inf_arm64_bf13798af99513c5 \
+  --ref="$hp_recovery_root/PRELOAD/BASE*.SWM" \
+  --dest-dir="$hp_audio_extract" --no-acls --no-attributes
+python3 02-drivers/soundwire/stage-hp-firmware.py \
+  "$hp_audio_extract/xucsmeext_8f22_fdl.inf_arm64_bf13798af99513c5" \
+  "$HOME/hp-audio-private/staged"
+```
+
+The stager checks all three SHA-256 values before creating output and writes
+private copies with the observed Linux names. It refuses output inside this
+repository. It neither downloads nor installs firmware and changes no boot,
+device, mixer or sleep setting. A different recovery revision needs its own
+review; similarly named files are not automatically accepted.
+
+## HP machine-driver identity patch
+
+The original MediaTek legacy machine driver assigns an OEM subsystem ID only
+for the ASUS. [hp-audio-identity.patch](../02-drivers/soundwire/hp-audio-identity.patch)
+adds an exact HP product/board/vendor/F.05 match and sets `103c:8f22` before
+registering the card. The codec adds its observed speaker-ID qualifier.
+The existing ASUS match is preserved. This is GPL kernel source, separate
+from the MIT staging helper and proprietary local firmware inputs.
+
+Use the `audio-source.c` from [Josie's pinned source record](https://github.com/pfeifferj/archlinuxarm-proart-p16/blob/3484cc008a9ee00b34c086c729e28e935cbc3430/02-drivers/audio/payload/provenance/hardware/audio-source.c),
+SHA-256 `4a3e4318ede455010a0e92eb776bcad22a7b3a5582d5bd75edfa5a33abf264e0`.
+An offline build, outside this repository, follows the tested native GCC
+16.1.1 build against the pinned vendor headers:
+
+```bash
+hp_audio_work="$HOME/hp-audio-private/module"
+mkdir -m 700 "$hp_audio_work"
+install -m 0644 /path/to/audio-source.c "$hp_audio_work/mt8901-acp-sdw-legacy-mach.c"
+printf '%s  %s\n' \
+  4a3e4318ede455010a0e92eb776bcad22a7b3a5582d5bd75edfa5a33abf264e0 \
+  "$hp_audio_work/mt8901-acp-sdw-legacy-mach.c" | sha256sum --check --strict
+patch --fuzz=0 "$hp_audio_work/mt8901-acp-sdw-legacy-mach.c" \
+  < 02-drivers/soundwire/hp-audio-identity.patch
+printf '%s\n' 'obj-m += mt8901-acp-sdw-legacy-mach.o' > "$hp_audio_work/Makefile"
+make -j2 -C /usr/src/linux-headers-7.0.0-1022-nvidia \
+  M="$hp_audio_work" CC=gcc HOSTCC=gcc CONFIG_DEBUG_INFO_BTF_MODULES= modules
+python3 01-platform/sleep/verify-modules.py /path/to/sleep-work/build/Module.symvers \
+  "$hp_audio_work/mt8901-acp-sdw-legacy-mach.ko"
+```
+
+The empty per-module BTF option follows the retained private driver's
+no-coupled-BTF convention; it does not disable BTF on the kernel or its stock
+modules. All 38 imported-symbol CRCs were checked against the exact #25 build.
+A matching release string alone is insufficient. The tested source version is
+`9834795298B30A6CAE8BF85`; binary hashes can depend on the local build paths.
+Keep compiled outputs private and follow [combined boot](combined-boot.md)
+for the exact existing boot layout. The portable preparation wrapper has
+host recovery tests, not a second fresh-install hardware qualification.
 
 The ACPI dump alone cannot supply these Windows files: the repository's
 collector copies hardware tables. Josie's

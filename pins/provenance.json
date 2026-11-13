@@ -87,5 +87,13 @@
       "drivers/nvme/host/pci.c": "77317e5d00f9fbd6061135090536d015f2d4c300"
     },
     "finding": "Base PCI driver exposes nvme.quirks; nvme.h maps simple_suspend to NVME_QUIRK_SIMPLE_SUSPEND. Not a physical HP Omarchy test."
+  },
+  "audio_enablement": {
+    "recorded_date": "2026-11-13",
+    "source_record": "pins/audio-results.json",
+    "local_firmware_identities": "pins/hp-speaker-firmware.json",
+    "source_patch": "02-drivers/soundwire/hp-audio-identity.patch",
+    "input_scope": "Owner-supplied HP recovery media, exact SHA-256 matches. No independent Windows catalog signature verification or firmware redistribution permission claimed.",
+    "runtime_scope": "Both amps loaded firmware/tuning/calibration on the #25 kernel; user confirmed stereo playback and local ASR confirmed internal microphone speech. Physical sleep with this new audio set pending."
   }
 }

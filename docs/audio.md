@@ -77,10 +77,17 @@ was inspected read-only on another computer. Its Windows image contains the
 8F22-specific tuning and matching DSP firmware 3.13.5. The driver metadata
 confirms the board and the left/right SoundWire mapping.
 
-See [Speaker tuning](speaker-tuning.md) for the recovery image identity,
-original filenames, expected Linux names and read-only checks. These files
-have not been installed or tested on the HP under Linux. No tuned/ROM audio
-comparison has been measured. Firmware binaries are not included in this tree.
+On 2026-11-13 the reference HP booted the combined #25 sleep kernel with the
+HP identity source patch and the locally acquired OEM files. Both amplifiers
+loaded firmware **3.13.5**, their separate link/UID tunings, and factory
+calibration. The owner confirmed correct left/right playback and heard the
+stereo test well at 45% PipeWire volume. This is a functional listening test;
+no controlled tuned/ROM comparison or protection measurement was performed.
+
+See [Speaker tuning](speaker-tuning.md) for file hashes, the required
+`103c8f22-spkid0` qualifier, source build steps and private staging. Run
+`python3 03-system/check/check-hp-audio.py` after boot to check both amps.
+Firmware binaries are not included in this tree.
 
 ## Microphone
 
@@ -99,5 +106,11 @@ systemctl --user enable --now hp-microphone.service
 
 The reference machine confirmed speech through this source. Gain is +18 dB
 on the two decimators.
+
+Capture was checked again on the combined boot on 2026-11-13. A local
+speech-recognition check recovered the requested phrase three times from a
+20-second sample. The speech interval had no clipped PCM samples. This is a
+functional capture test, not an acoustic-quality or noise-rejection rating.
+Recordings and transcripts stay private.
 
 The CS35L56 speaker tuning is separate from this CS42L43 microphone route.

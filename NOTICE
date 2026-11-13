@@ -27,6 +27,12 @@ that license, regardless of this repository's top-level MIT helper license.
 The extracted vendor original.config accompanies those kernel sources.
 The full GPL-2.0 text is LICENSES/GPL-2.0-only.txt.
 
+02-drivers/soundwire/hp-audio-identity.patch modifies MediaTek's GPL machine
+driver as carried in Josephine's pinned audio-source.c. It retains GPL-2.0-only,
+the existing ASUS match and upstream author/copyright notices. Its provenance
+is recorded in pins/audio-results.json; it is not covered by the helper MIT
+license. The compiler identity test is also GPL-2.0-only.
+
 1096-eint-wake.patch is unchanged from NVIDIA author Kaushal Rajeev Butala,
 commit 0f0aeba492533b9dba991f131289d4a17c1f3c5d. Its authorship and
 Signed-off-by are preserved; they are not a new sign-off by this project.

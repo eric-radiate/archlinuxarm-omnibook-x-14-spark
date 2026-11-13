@@ -1,0 +1,31 @@
+{
+  "recorded_date": "2026-11-13",
+  "board": "8F22",
+  "bios": "F.05",
+  "subsystem": "103c8f22",
+  "observed_speaker_id": 0,
+  "dsp_firmware_version": "3.13.5",
+  "driverstore_directory": "xucsmeext_8f22_fdl.inf_arm64_bf13798af99513c5",
+  "extension_inf_sha256": "0ccc90efd9e0ec2474dfd41e6e4b63baced23ceb5a538b34fad45ef512150501",
+  "files": [
+    {
+      "source": "fw/35L56/3.13.5/dflt/b0_dflt_35l56_3.13.5.wmfw",
+      "target": "cs35l56-b0-dsp1-misc-103c8f22-spkid0.wmfw",
+      "sha256": "816853191b40050c31fbeba1c82aff3dab8ab69b30e82e5b9274b7f1d0c10eb6",
+      "bytes": 35804
+    },
+    {
+      "source": "tn/35L56/8F22/dflt/b0_dflt_8f22_rw_l0u0.bin",
+      "target": "cs35l56-b0-dsp1-misc-103c8f22-spkid0-l0u0.bin",
+      "sha256": "b92734b1bd2621658ef65655fb31453a4ed040c4448fb4b9788e8158e91f80a7",
+      "bytes": 11444
+    },
+    {
+      "source": "tn/35L56/8F22/dflt/b0_dflt_8f22_lw_l0u1.bin",
+      "target": "cs35l56-b0-dsp1-misc-103c8f22-spkid0-l0u1.bin",
+      "sha256": "1de5c8e79635b0e5bb9019288e93261ee4fd3034bf7507431aa1e07dac6f5565",
+      "bytes": 11444
+    }
+  ],
+  "redistribution": "No firmware is included or licensed by this manifest. Inputs stay local under their applicable terms."
+}

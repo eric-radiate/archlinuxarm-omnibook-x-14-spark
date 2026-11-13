@@ -22,7 +22,7 @@ were taken from that system.
 | --- | --- |
 | NVIDIA display and unified memory | Running with the pinned stack; driver memory mode selectable |
 | Battery, AC and thermal methods | Tested minimal, exact-hash local DSDT fix |
-| Speakers / microphone | HP routes work; matching speaker tuning found in recovery media, Linux loading untested |
+| Speakers / microphone | HP firmware 3.13.5, per-speaker tuning and calibration loaded; stereo playback and internal mic speech confirmed |
 | Keyboard, touchpad, Wi-Fi, Bluetooth, UVC camera | Observed on the reference system; see hardware notes |
 | Keyboard backlight | Firmware F10 key; no Linux LED control in this kernel |
 | Sleep | Patched-kernel short test: about 1.18 W; sustained sleep and lid-only wake unqualified |
@@ -30,7 +30,10 @@ were taken from that system.
 
 Sleep needs the complete experimental kernel, LPS0, SSD and wake changes in
 [Sleep](docs/sleep.md). Enabling lid policy alone does not provide low-power
-sleep. An ordinary reboot into the original kernel does not activate the trial.
+sleep. The reference machine now uses one combined default boot entry with
+that kernel and the HP audio fix. The original kernel remains a recovery
+option; it does not provide the measured low-power behavior. Sleep with the
+new audio firmware still needs a physical test.
 
 HP, OmniBook, ASUS, ProArt, and NVIDIA names identify the hardware and the
 upstream project. This repository is not published by those companies.
@@ -43,9 +46,11 @@ upstream project. This repository is not published by those companies.
 | [Hardware](docs/hardware.md) | Board, packages, boot, and the devices this tree covers |
 | [ACPI](docs/acpi.md) | The battery override, built on the machine |
 | [Audio](docs/audio.md) | Speaker route for the HP SoundWire card |
-| [Speaker tuning](docs/speaker-tuning.md) | Verified HP recovery source, file mapping and remaining Linux checks |
+| [Speaker tuning](docs/speaker-tuning.md) | HP recovery provenance, source patch, verified Linux loading and private staging |
 | [Memory](docs/memory.md) | The shared DRAM pool and the driver mode switch |
 | [Sleep](docs/sleep.md) | Tested source changes, measurements, recovery and Omarchy port gaps |
+| [Combined boot](docs/combined-boot.md) | Single default entry, matching modules, backups and recovery |
+| [SSD migration](docs/nvme-migration.md) | Prepare for an offline clone; requalify sleep on a replacement SSD |
 | [Limits](docs/limits.md) | Firmware pin, missing pieces, unverified behavior |
 | [Upstream](docs/upstream.md) | The ASUS project this tree builds on |
 | [Licensing](docs/legal.md) | License scope, retained notices and redistribution limits |
@@ -62,7 +67,7 @@ NVIDIA modules, Archinstall, and the USB image stay in that project.
 | `01-platform/acpi/` | Battery override built from this machine's tables, the table collector, and the patcher test |
 | `01-platform/sleep/` | Experimental sleep kernel patches, GPL companion, build/trial helpers and failure tests |
 | `02-drivers/nvidia-display/` | Coherent GPU memory mode switch. No NVIDIA modules |
-| `02-drivers/soundwire/` | Two-amp match for the installed `soundwire-mtk` machine table |
+| `02-drivers/soundwire/` | Legacy two-amp match, HP audio identity patch and private firmware staging |
 | `03-system/input-audio/` | Speaker route, microphone route, PipeWire udev rule, and user services |
 | `03-system/policy/` | Camera modprobe override, logind suspend policy, and the Wi-Fi regulatory database |
 | `03-system/check/` | Read-only identity check and the post-boot report |

@@ -16,6 +16,13 @@ __pycache__/
 *.bin
 *.pem
 *.key
+*.wav
+*.flac
+*.mp3
+*.swm
+*.wim
+*.inf
+*.cat
 vmlinux
 build/
 stage/

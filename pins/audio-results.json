@@ -1,0 +1,48 @@
+{
+  "recorded_date": "2026-11-13",
+  "hardware": "HP OmniBook X Laptop 14-ks000 / 8F22 / F.05",
+  "kernel": "7.0.0-1022-nvidia #25~hp-sleep-wake1",
+  "machine_source": {
+    "repository": "https://github.com/pfeifferj/archlinuxarm-proart-p16",
+    "commit": "3484cc008a9ee00b34c086c729e28e935cbc3430",
+    "path": "02-drivers/audio/payload/provenance/hardware/audio-source.c",
+    "original_sha256": "4a3e4318ede455010a0e92eb776bcad22a7b3a5582d5bd75edfa5a33abf264e0",
+    "patched_sha256": "aeacfd2d53e56d3c71724fff89e5814d44bb375d0b8fa6d06cbbdc2f0d2c9e71",
+    "license": "GPL-2.0-only; retain MediaTek and upstream notices"
+  },
+  "historical_build": {
+    "compiler": "GCC 16.1.1 20260430",
+    "module_sha256": "9a0e24bf71e96f356e93e04729679243d30120a5867716f428bbd8a6d65b5f94",
+    "srcversion": "9834795298B30A6CAE8BF85",
+    "symbol_imports_verified_against_kernel25": 38,
+    "coupled_btf": false,
+    "header_symvers_sha256": "ad63eccd8911085a10d7996b78dd0c40f6bcaa0b32d42986a9cce39e0101a7ba",
+    "kernel25_symvers_sha256": "d0dc09557e0950b84168517885e8f476c9167361cce4bde2ed7393921f42ffb8"
+  },
+  "amplifiers": {
+    "0": {
+      "firmware_version": "3.13.5",
+      "tuning_ids": "Tuning PID: 0x103135, SID: 0x24100a, TID: 0x5a0618",
+      "firmware_missing": false,
+      "calibration_applied": true
+    },
+    "1": {
+      "firmware_version": "3.13.5",
+      "tuning_ids": "Tuning PID: 0x103135, SID: 0x24110a, TID: 0x5a0618",
+      "firmware_missing": false,
+      "calibration_applied": true
+    }
+  },
+  "playback": "User confirmed correct left/right channels at 30% and heard the test well at 45%.",
+  "sound_comparison": "No controlled tuned-versus-ROM loudness, bass, distortion or protection measurement.",
+  "combined_boot": "Single normal systemd-boot entry h7607a.conf uses the existing #25 kernel with matching modules and OEM audio. Physical sleep with this new audio set remains untested.",
+  "firmware_distribution": "None; hashes and factual observations only.",
+  "microphone_test": {
+    "date": "2026-11-13",
+    "source": "hp.internal-microphone",
+    "duration_seconds": 20,
+    "speech_recognized": "Requested phrase recognized three times by local ASR.",
+    "speech_window_clipped_samples": 0,
+    "scope": "Functional speech capture; no recording, transcript or speaker identity published."
+  }
+}
