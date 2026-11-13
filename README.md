@@ -25,15 +25,15 @@ were taken from that system.
 | Speakers / microphone | HP firmware 3.13.5, per-speaker tuning and calibration loaded; stereo playback and internal mic speech confirmed |
 | Keyboard, touchpad, Wi-Fi, Bluetooth, UVC camera | Observed on the reference system; see hardware notes |
 | Keyboard backlight | Firmware F10 key; no Linux LED control in this kernel |
-| Sleep | Patched-kernel short test: about 1.18 W; sustained sleep and lid-only wake unqualified |
+| Sleep | Combined boot: about 0.90 W over 3 minutes; lid-only wake and post-resume audio confirmed; sustained/repeated sleep unqualified |
 | Omarchy | Source/integration review only; not installed or physically tested |
 
 Sleep needs the complete experimental kernel, LPS0, SSD and wake changes in
 [Sleep](docs/sleep.md). Enabling lid policy alone does not provide low-power
 sleep. The reference machine now uses one combined default boot entry with
 that kernel and the HP audio fix. The original kernel remains a recovery
-option; it does not provide the measured low-power behavior. Sleep with the
-new audio firmware still needs a physical test.
+option; it does not provide the measured low-power behavior. The combined
+boot passed one short unplugged sleep/wake test with the new audio firmware.
 
 HP, OmniBook, ASUS, ProArt, and NVIDIA names identify the hardware and the
 upstream project. This repository is not published by those companies.

@@ -94,6 +94,6 @@
     "local_firmware_identities": "pins/hp-speaker-firmware.json",
     "source_patch": "02-drivers/soundwire/hp-audio-identity.patch",
     "input_scope": "Owner-supplied HP recovery media, exact SHA-256 matches. No independent Windows catalog signature verification or firmware redistribution permission claimed.",
-    "runtime_scope": "Both amps loaded firmware/tuning/calibration on the #25 kernel; user confirmed stereo playback and local ASR confirmed internal microphone speech. Physical sleep with this new audio set pending."
+    "runtime_scope": "Both amps loaded firmware/tuning/calibration on #25; stereo playback and internal microphone speech confirmed. Later combined short sleep passed at about 0.90 W; lid-only wake and post-resume stereo playback confirmed. Sustained/repeated sleep unqualified."
   }
 }

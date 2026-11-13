@@ -45,6 +45,14 @@ observations, filenames, mappings and archive metadata. It does not include
 HP's recovery image, Windows driver package, INF text or firmware binaries.
 The repository's MIT license does not grant rights to those separate inputs.
 
+The 2026-11-13 source review also checked tracked files and reachable commit
+history for firmware, recovery images, recordings, compiled modules and keys;
+none of those artifact types were found. The current tracked tree is UTF-8
+text. The new identity patch and compiler identity test are explicitly GPL,
+and the full upstream MIT notices remain included. These checks establish
+what was reviewed, not independent authorship or legal clearance for every
+line or an earlier distribution.
+
 The [U.S. Copyright Office distinguishes facts and discoveries from protected expression](https://www.copyright.gov/what-is-copyright/).
 The recovery source is reported as factual provenance in original prose.
 

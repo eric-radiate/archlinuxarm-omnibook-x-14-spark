@@ -35,7 +35,7 @@
   },
   "playback": "User confirmed correct left/right channels at 30% and heard the test well at 45%.",
   "sound_comparison": "No controlled tuned-versus-ROM loudness, bass, distortion or protection measurement.",
-  "combined_boot": "Single normal systemd-boot entry h7607a.conf uses the existing #25 kernel with matching modules and OEM audio. Physical sleep with this new audio set remains untested.",
+  "combined_boot": "Single normal default #25 boot with matching modules and OEM audio passed a short unplugged sleep test: 0.046 Wh / 183.652 s, about 0.90 W, 178.251 s actually suspended. User confirmed lid-only wake and stereo playback after resume.",
   "firmware_distribution": "None; hashes and factual observations only.",
   "microphone_test": {
     "date": "2026-11-13",

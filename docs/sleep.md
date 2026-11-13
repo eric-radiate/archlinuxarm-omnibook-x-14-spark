@@ -17,20 +17,30 @@ time. Both endpoints were on battery in the same boot.
 | Firmware idle + LPS0/link, without full SSD suspend | 129.56 / 124.12 | 0.515 Wh | 14.31 W |
 | Same + exact SSD simple_suspend quirk | 167.55 / 161.99 | 0.063 Wh | 1.35 W |
 | Same + NVIDIA EINT wake patch, kernel #25 | 143.00 / 137.78 | 0.047 Wh | 1.18 W |
+| Same #25 + OEM audio, persistent combined boot (2026-11-13) | 183.65 / 178.25 | 0.046 Wh | 0.90 W |
 
 These are short samples, not an overnight discharge estimate or a physical
 DRIPS-residency percentage. The firmware residency counter is 32-bit at
 1GHz and wraps in 4.295 seconds; a single snapshot cannot establish residency.
 
-The final short trial resumed, GPU and Wi-Fi returned, and no system units
+The 2026-11-11 short trial resumed, GPU and Wi-Fi returned, and no system units
 failed. The kernel recorded IRQ90, the SYNA3536 internal touchpad wake route.
 Lid-open was logged at resume, but opening the lid **alone** was not confirmed
 as the trigger. The preceding trial needed the power button. Resume warnings
 included an ieee80211 workqueue/suspend warning and SoundWire control-bus
-clash `0x80000400`; these remain recorded limitations.
+clash `0x80000400`; these remain recorded limitations of that trial.
 
-Long (at least 30–60 minutes, preferably over an hour) battery tests, repeated
-cycles, and lid-only wake still need qualification. Closed-lid transport is
+The later combined boot passed one 3-minute test with the HP audio firmware
+loaded. The owner confirmed **opening the lid alone** woke the display and
+confirmed stereo playback afterward. GPU and Wi-Fi returned, with no failed
+system units. The kernel reported IRQ68, `mt-eint20 / ACPI:Event`. This trial
+still logged the ieee80211 warning and `The lid device is not compliant to
+SW_LID.` The user-observed wake worked despite that firmware warning.
+The difference between the two short power samples does not establish an
+improvement caused by the audio firmware.
+
+Long (at least 30–60 minutes, preferably over an hour) battery tests and
+repeated wake cycles still need qualification. Closed-lid transport is
 not qualified. The firmware thermal warning reported earlier establishes an
 overheating event; the logs do not prove its precise cause.
 
@@ -136,8 +146,9 @@ the fixes active. On 2026-11-13 the reference machine was subsequently moved
 to a [single combined default](combined-boot.md), retaining that same kernel
 and matching modules while adding the verified OEM audio setup. Its boot
 admission checks pass and stereo playback and microphone capture work.
-Physical sleep with the new audio set has not yet been tested; the measured
-1.18 W above remains the earlier trial's result.
+The later short physical sleep test averaged 0.90 W over the whole interval,
+with lid-only wake and post-resume audio confirmed. The 1.18 W value remains
+the earlier trial's result; neither is an overnight estimate.
 
 `prepare-combined.py` records the later promotion workflow, including full
 boot backup, off-ESP image generation, embedded module/firmware verification,

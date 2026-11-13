@@ -4,8 +4,12 @@ On 2026-11-13 the reference machine moved from separate trials to one normal
 systemd-boot entry combining the previously short-tested #25 sleep kernel
 with the HP audio identity patch and locally acquired OEM files. Both amps
 loaded firmware 3.13.5, tuning and calibration. Stereo playback and internal
-microphone speech were confirmed. A new physical sleep test with that audio
-firmware remains pending; the earlier 1.18 W result is not a new measurement.
+microphone speech were confirmed. A later unplugged test used 0.046 Wh over
+183.652 seconds, with 178.251 seconds actually suspended: about **0.90 W**
+over the whole interval. The owner confirmed lid-only wake and stereo audio
+after resume. GPU and Wi-Fi returned with no failed system units.
+This is one short test; sustained/repeated sleep and transport remain
+unqualified. The earlier 1.18 W result is a separate measurement.
 
 This is systemd-boot invoking an EFI shell, not GRUB.
 

@@ -26,12 +26,13 @@ The speaker route refuses any other board.
   Internal microphone capture is the long-running route in [Audio](audio.md).
 - The complete experimental Arch sleep kernel passed a short low-power
   suspend/resume test (about 1.18 W over 143 seconds). Sustained sleep,
-  repeated cycles, lid-only wake and Omarchy remain unqualified. The original
+  repeated cycles and Omarchy remain unqualified. The original
   kernel consumed about 14–16 W during sleep. The logind drop-in alone does
   not fix this. See [Sleep](sleep.md) for evidence and required components.
-- The reference default now combines that sleep kernel with OEM audio.
-  The previous short power result predates the audio firmware change; a
-  physical sleep/power test with the combined audio set remains pending.
+- The reference default combines that sleep kernel with OEM audio and passed
+  one later 3-minute unplugged test (about 0.90 W). The owner confirmed lid-only
+  wake and stereo playback afterward. Repeated cycles and sustained sleep
+  remain unqualified; ieee80211 and ACPI SW_LID warnings were logged.
 - The current sleep companion and NVMe quirk are scoped to the Ramaxel SSD.
   A replacement needs its own power/wake qualification. The
   [migration helper](nvme-migration.md) backs up the setup and pauses sleep;
